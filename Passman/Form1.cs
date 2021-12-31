@@ -73,25 +73,25 @@ namespace Passman
                 {
                     text = SiteListView.Items[i].Text;
                 });
-                Image image = Internal.GetIcon(text);
+                Image image = Imaging.GetIcon(text);
                 if (image == null)
                 {
                     if (online)
                     {
-                        Image img = GetFavIcon(text);
+                        Image img = Imaging.GetFavIcon(text);
                         //if (img == null) { img = Image.FromFile("world-icon.png"); }
                         this.SiteListView.Invoke((MethodInvoker)delegate
                         {
                             SiteListView.SmallImageList.Images.Add(img);
                             SiteListView.Items[i].ImageIndex = SiteListView.SmallImageList.Images.Count - 1;
                         });
-                        Internal.SaveImage(text, img);
+                        Imaging.SaveImage(text, img);
                     }
                     else
                     {
                         this.SiteListView.Invoke((MethodInvoker)delegate
                         {
-                            SiteListView.SmallImageList.Images.Add(Image.FromFile(Internal.GlobeIconPath));
+                            SiteListView.SmallImageList.Images.Add(Image.FromFile(Imaging.GlobeIconPath));
                             SiteListView.Items[i].ImageIndex = SiteListView.SmallImageList.Images.Count - 1;
                         });
                     }
@@ -104,32 +104,8 @@ namespace Passman
                         SiteListView.Items[i].ImageIndex = SiteListView.SmallImageList.Images.Count - 1;
                     });
                 }
-                //if (!offline)
-                //{
-                    
-
-                //    Image img = GetFavIcon(text);
-                //    if (img == null) { img = Image.FromFile("world-icon.png"); }
-                //    this.listView1.Invoke((MethodInvoker)delegate
-                //    {
-                //        listView1.SmallImageList.Images.Add(img);
-                //        listView1.Items[i].ImageIndex = listView1.SmallImageList.Images.Count - 1;
-                //    });
-                //}
-                //else
-                //{
-                //    Internal.GetIcon(text);
-
-                //    Image img = Image.FromFile("world-icon.png");
-                //    this.listView1.Invoke((MethodInvoker)delegate
-                //    {
-                //        listView1.SmallImageList.Images.Add(img);
-                //        listView1.Items[i].ImageIndex = listView1.SmallImageList.Images.Count - 1;
-                //    });
-                //}
             }           
-        }
-        
+        }       
         private void ShowPasswordBtn_MouseDown(object sender, MouseEventArgs e)
         {
             Password.UseSystemPasswordChar = false;
