@@ -16,10 +16,7 @@ namespace Passman.Resources
     internal class Internal
     {
         public static string ExecutableDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-        public static bool Internet;
-
-        
+        public static bool Internet;      
         public static bool CheckForInternetConnection(int timeoutMs = 10000, string url = null)
         {
             try
@@ -78,7 +75,7 @@ namespace Passman.Resources
         {
             string site = website.Split("//")[1];
             Bitmap bmp = new Bitmap(image);
-            bmp.Save(Path.Combine(IconDirectory, site + ".jpg"), ImageFormat.Jpeg);
+            bmp.Save(Path.Combine(IconDirectory, site + ".png"), ImageFormat.Png);
         }
         public static bool DoesUrlRespond(string url)
         {
