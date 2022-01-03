@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Text.RegularExpressions;
 
 namespace Passman.Resources
 {

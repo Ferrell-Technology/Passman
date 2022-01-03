@@ -139,6 +139,7 @@ namespace Passman
         }
         private void SiteListView_SelectedIndexChanged(object sender, EventArgs e)
         {
+            
             if (SiteListView.SelectedItems.Count > 0)
             {
                 if (hasChanged)
@@ -154,6 +155,7 @@ namespace Passman
                 ItemDetails.Text = "Details - " + SiteListView.SelectedItems[0].Text;
                 ItemDetails.Visible = true;
                 SaveBtn.Enabled = false;
+                SaveBtn.Text = "Save";
                 ICredential credential = list[SiteListView.SelectedIndices[0]];
                 Type.SelectedItem = credential.Type.ToString();
                 if (credential.Type == CredentialType.Standard)
@@ -162,6 +164,7 @@ namespace Passman
                 Username.Text = credential.Username;
                 Password.Text = credential.Password;
                 Notes.Text = credential.Notes;
+                CheckPasswordStrength();
                 ModifyTextboxListeners(true);
             }
         }
@@ -175,6 +178,8 @@ namespace Passman
         }
         private void SaveBtn_Click(object sender, EventArgs e)
         {
+            SaveBtn.Enabled = false;
+            SaveBtn.Text = "Saving...";
             ICredential credential = null;
             Enum.TryParse(Type.GetItemText(Type.SelectedItem), out CredentialType type);
             switch (type)
@@ -211,12 +216,18 @@ namespace Passman
                 Resources.MySql.Add(credential);
                 AddToListView(credential);
                 AssignIcons(Internal.Internet);
-            }       
+            }
+            SaveBtn.Text = "Saved!";
         }
         private void Textboxes_TextChanged(object sender, EventArgs e)
         {
             SaveBtn.Enabled = true;
+            SaveBtn.Text = "Save";
             hasChanged = true;
+            if ((TextBox)sender == Password)
+            {
+                CheckPasswordStrength();
+            }
         }
         private void AddToListView(ICredential credential)
         {
@@ -241,6 +252,52 @@ namespace Passman
             else if (Type.SelectedItem.ToString() == CredentialType.Website.ToString())
             {
                 Website.Enabled = true;
+            }
+        }
+        private void SiteListView_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                ListViewItem focusedItem = SiteListView.FocusedItem;
+                if (focusedItem != null && focusedItem.Bounds.Contains(e.Location))
+                {
+                    SiteItemContextMenu.Show(Cursor.Position);
+                }
+                else
+                {
+                    SiteContextMenu.Show(Cursor.Position);
+                }
+            }
+        }
+        private void CheckPasswordStrength()
+        {
+            Security.PasswordStrength score = Security.PasswordCheck.GetPasswordStrength(Password.Text);
+            switch (score)
+            {
+                case Security.PasswordStrength.Blank:
+                    PasswordStrength.Text = "Blank";
+                    PasswordStrength.ForeColor = Color.DarkRed;
+                    break;
+                case Security.PasswordStrength.VeryWeak:
+                    PasswordStrength.Text = "Very Weak";
+                    PasswordStrength.ForeColor = Color.Red;
+                    break;
+                case Security.PasswordStrength.Weak:
+                    PasswordStrength.Text = "Weak";
+                    PasswordStrength.ForeColor = Color.Red;
+                    break;
+                case Security.PasswordStrength.Medium:
+                    PasswordStrength.Text = "Medium";
+                    PasswordStrength.ForeColor = Color.FromArgb(255, 140, 0);
+                    break;
+                case Security.PasswordStrength.Strong:
+                    PasswordStrength.Text = "Strong";
+                    PasswordStrength.ForeColor = Color.FromArgb(46, 139, 87);
+                    break;
+                case Security.PasswordStrength.VeryStrong:
+                    PasswordStrength.Text = "Very Strong";
+                    PasswordStrength.ForeColor = Color.Green;
+                    break;
             }
         }
     }
